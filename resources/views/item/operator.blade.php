@@ -7,19 +7,16 @@
     @endif
     <div class="d-flex justify-content-between">
         <h5>Tabel item</h5>
-        <a class="btn btn-success  mb-3" href="{{ route('item.export') }}" role="button">Export Excel</a>
-        <a class="btn btn-dark  mb-3" href="{{ route('item.create') }}" role="button">+ add</a>
     </div>
     <table class="table">
         <thead>
             <tr class="table-active">
                 <th scope="col">#</th>
-                <th scoper="col">Category</th>
+                <th scoper="col">Item</th>
                 <th scope="col">Name</th>
                 <th scope="col">total</th>
-                <th scope="col">Repair</th>
+                <th scope="col">Available</th>
                 <th scope="col">Lending</th>
-                <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -34,18 +31,8 @@
                         <td>{{ $item->category->name }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->total }}</td>
-                        <td>{{ $item->repair }}</td>
-                        <td>
-                            @if ($item->total_lending > 0)
-                                <a href="{{ route('lending.show', $item->id) }}">
-                                    {{ $item->total_lending }}
-                                </a>
-                            @else
-                                0
-                            @endif
-                        </td>
-                        <td>
-                            <a class="btn btn-success" href="{{ route('item.edit', $item->id) }}" role="button">edit</a>
+                        <td>{{ $item->available }}</td>
+                        <td>{{ $item->total_lending ?? 0 }}
                         </td>
                     </tr>
                 @endforeach

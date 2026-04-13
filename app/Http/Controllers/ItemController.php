@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -13,10 +14,16 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::with('category')->withCount(['detailLendings as total_lending' => fn($q) => 
-        $q->whereHas('lending', fn($q) => $q->whereNull('return_date'))])->get() ;
+        $items = Item::with('category')->withCount(['detailLendings as total_lending' => function ($q) {
+            $q->whereHas('lending', function ($q) {
+                $q->whereNull('return_date');
+            });
+        }])->get();
 
-        return view('item.index', compact('items'));
+        if(Auth::user()->role == 'admin') {
+            return view('item.index', compact('items'));
+        }
+        return view('item.operator', compact('items'));
     }
 
     /**
@@ -69,10 +76,16 @@ class ItemController extends Controller
         $request->validate([
             'name' => 'required',
             'category_id' => 'required',
-            'total' => 'required',
+            'total' => 'required|numeric',
+            'new_repair' => 'nullable|numeric|min:0'
         ]);
 
-        $item->update($request->all());
+        $item->update([
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'total' => $request->total,
+            'repair' => $item->repair + ($request->new_repair ?? 0)
+        ]);
 
         return redirect()->route('item.index')->with('success', 'Item updated succeccfully');
     }

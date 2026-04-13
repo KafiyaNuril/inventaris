@@ -38,6 +38,13 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">
+                <label for="repair" class="form-label">New Broke Item <span class="text-warning">( currently : {{ $item->repair }} )</span></label>
+                <input type="number" class="form-control @error('repair') is-invalid @enderror" name="repair">
+                @error('repair')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
             <a href="{{ route('item.index') }}" class="btn btn-secondary">Cancel</a>
             <button type="submit" class="btn btn-dark">Submit</button>
         </form>

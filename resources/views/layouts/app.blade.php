@@ -10,35 +10,66 @@
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand">Navbar</a>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                <button class="btn btn-outline-success" type="submit">Search</button>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button class="btn btn-outline-dark">Logout</button>
             </form>
         </div>
     </nav>
     
     <div class="row">
         <ul class="col-2 nav flex-column border-end fs-6 ps-4">
-            <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
-            </li>
-            <li class="nav-item"> 
-                <a class="nav-link" href="{{ route('category.index') }}">Categeory</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('item.index') }}">Item</a>
-            </li>
-            <li class="nav-item">
-                <div class="dropdown">
-                    <button class="btn ms-1 border-white dropdown-toggle" type="button" data-bs-toggle="dropdown"">
-                        User
-                    </button>
-                    <ul class="dropdown-menu border-white ms-3 ">
-                        <li><a class="dropdown-item" href="{{ route('user.index') }}">Admin</a></li>
-                        <li><a class="dropdown-item" href="{{ route('user.index') }}">Operator</a></li>
-                    </ul>
-                </div>
-            </li>
+            @auth
+                @if (auth()->user()->role == 'admin')
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" aria-current="page" href="{{ route('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link text-dark" href="{{ route('category.index') }}">Categeory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('item.index') }}">Item</a>
+                    </li>
+                    <li class="nav-item dropdown-center">
+                        <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#">
+                            <i class="bi bi-person-fill"></i> User
+                        </a>
+                        <ul class="dropdown-menu bg-transparent border-0 shadow-none">
+                            <li>
+                                <a class="dropdown-item {{ request('role') == 'admin' ? 'muted' : '' }}" href="{{ route('user.index', ['role' => 'admin']) }}">
+                                    Admin
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('user.index', ['role' => 'operator']) }}">
+                                    Operator
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" aria-current="page" href="{{ route('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('lending.index') }}">Lending</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="{{ route('item.index') }}">Item</a>
+                    </li>
+                    <li class="nav-item dropdown-center">
+                        <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" href="#">
+                            <i class="bi bi-person-fill"></i> User
+                        </a>
+                        <ul class="dropdown-menu bg-transparent border-0 shadow-none">
+                            <a class="dropdown-item" href="{{ route('user.edit', auth()->id() ) }}">
+                                Edit
+                            </a>
+                        </ul>
+                    </li>
+                @endif
+            @endauth
+
         </ul>
         <div class="col-10 mt-3 pe-4">
             @yield('content')

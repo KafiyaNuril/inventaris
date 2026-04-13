@@ -22,4 +22,13 @@ class Item extends Model
     {
         return $this->hasMany(DetailLending::class);
     }
+
+    public function getAvailableAttribute()
+    {
+        $lending = $this->detailLendings()
+            ->whereHas('lending', fn($q) => $q->whereNull('return_date'))
+            ->sum('qty');
+
+        return $this->total - ( $this->repair ?? 0 ) - $lending;
+    }
 }

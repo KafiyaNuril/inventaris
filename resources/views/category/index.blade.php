@@ -12,11 +12,11 @@
     <table class="table">
         <thead>
             <tr class="table-active">
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Division Pj</th>
-                <th scope="col">Total Items</th>
-                <th scope="col">Action</th>
+                <th>#</th>
+                <th>Name</th>
+                <th>Division Pj</th>
+                <th>Total Items</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -25,17 +25,17 @@
                     <td colspan="5" class="text-center">Category is Empty</td>
                 </tr>
             @else
-                <tr>
-                    @foreach( $categories as $index => $category)
+                @foreach( $categories as $index => $category)
+                    <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $category->name }}</td>
                         <td>{{ $category->division_pj }}</td>
-                        <td>{{ $category->total_items }}</td>
+                        <td>{{ $category->total_items ?? 0 }}</td>
                         <td>
                             <a class="btn btn-success" href="{{ route('category.edit', $category->id) }}" role="button">edit</a>
                         </td>
-                    @endforeach
-                </tr>
+                    </tr>
+                @endforeach
             @endif
         </tbody>
     </table>

@@ -22,8 +22,7 @@
                 <select class="form-select @error('division_pj') is-invalid @enderror" name="division_pj">
                     <option selected disabled hidden>Select Division PJ</option>
                     <option value="Sarpras">Sarpras</option>
-                    <option value="Tata Usaha">Tata Usaha
-                    </option>
+                    <option value="Tata Usaha">Tata Usaha</option>
                     <option value="Tefa">Tefa</option>
                 </select>
                 @error('division_pj')

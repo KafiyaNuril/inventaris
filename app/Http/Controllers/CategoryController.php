@@ -12,7 +12,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withCount('item')->get();
+        $categories = Category::withCount('items')->get();
         return view('category.index', compact('categories'));
     }
 
@@ -31,7 +31,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'division_pj' => 'required|in:Sarpras,Tata Usaha, Tefa'
+            'division_pj' => 'required|in:Sarpras,Tata Usaha,Tefa'
         ]);
 
         Category::create($request->all());
@@ -62,7 +62,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'division_pj' => 'required|in:Sarpras,Tata Usaha, Tefa'
+            'division_pj' => 'required|in:Sarpras,Tata Usaha,Tefa'
         ]);
 
         $category->update($request->all());

@@ -11,7 +11,7 @@ class Category extends Model
         'division_pj',
     ];
 
-    public function item()
+    public function items()
     {
         return $this->hasMany(Item::class);
     }

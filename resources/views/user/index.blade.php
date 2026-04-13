@@ -6,7 +6,7 @@
         </div>
     @endif
     <div class="d-flex justify-content-between">
-        <h3>Tabel User</h3>
+        <h3>Tabel User {{ ucfirst(request('role') ?? 'All ') }}</h3>
         <a class="btn btn-dark mb-3" href="{{ route('user.create') }}" role="button">+ add</a>
     </div>
     <table class="table">
@@ -24,18 +24,31 @@
                     <td colspan="5" class="text-center">User is Empty</td>
                 </tr>
             @else
-                <tr>
-                    @foreach( $users as $index => $user)
+                @foreach( $users as $index => $user)
+                    <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            <a class="btn btn-success" href="{{ route('user.edit', $user->id) }}" role="button">edit</a>
-                            <a class="btn btn-danger" href="{{-- route('user.delete', $user->id) --}}" role="button">delete</a>
+                            @if($user->role == 'admin')
+                                <a class="btn btn-success" href="{{ route('user.edit', $user->id) }}" role="button">edit</a>
+                            @else
+                                <form action="{{ route('user.reset', $user->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="btn btn-warning">Reset Password</button>
+                                </form>
+                            @endif
+                            <form action="{{ route('user.destroy', $user->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
                         </td>
-                    @endforeach
-                </tr>
+                    </tr>
+                @endforeach
             @endif
         </tbody>
     </table>
+
 @endsection
